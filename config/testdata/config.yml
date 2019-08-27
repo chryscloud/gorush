@@ -35,6 +35,10 @@ api:
   metric_uri: "/metrics"
   health_uri: "/healthz"
 
+auth:
+  enabled: false
+  apikey: "abc"
+
 android:
   enabled: true
   apikey: "YOUR_API_KEY"

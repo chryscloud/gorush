@@ -96,6 +96,7 @@ type ConfYaml struct {
 	Log     SectionLog     `yaml:"log"`
 	Stat    SectionStat    `yaml:"stat"`
 	GRPC    SectionGRPC    `yaml:"grpc"`
+	Auth    SectionAuth    `yaml:"auth"`
 }
 
 // SectionCore is sub section of config.
@@ -123,6 +124,12 @@ type SectionAutoTLS struct {
 	Enabled bool   `yaml:"enabled"`
 	Folder  string `yaml:"folder"`
 	Host    string `yaml:"host"`
+}
+
+// SectionAuth enables to set auth key read from request headers
+type SectionAuth struct {
+	Enabled bool   `yaml:"enabled"`
+	APIKEY  string `yaml:"apikey"`
 }
 
 // SectionAPI is sub section of config.
@@ -283,6 +290,10 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Android.Enabled = viper.GetBool("android.enabled")
 	conf.Android.APIKey = viper.GetString("android.apikey")
 	conf.Android.MaxRetry = viper.GetInt("android.max_retry")
+
+	// Auth
+	conf.Auth.APIKEY = viper.GetString("auth.apikey")
+	conf.Auth.Enabled = viper.GetBool("auth.enabled")
 
 	// iOS
 	conf.Ios.Enabled = viper.GetBool("ios.enabled")

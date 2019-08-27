@@ -110,6 +110,7 @@ func routerEngine() *gin.Engine {
 	// Global middleware
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(AuthMiddleware())
 	r.Use(VersionMiddleware())
 	r.Use(LogMiddleware())
 	r.Use(StatMiddleware())

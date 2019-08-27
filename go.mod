@@ -15,7 +15,9 @@ require (
 	github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23
 	github.com/dgraph-io/badger v1.5.5
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/golang/protobuf v1.3.1
+	github.com/igorrendulic/go-aws-kms v0.0.1
 	github.com/mattn/go-isatty v0.0.8
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/prometheus/client_golang v1.0.0
