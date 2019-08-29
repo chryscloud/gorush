@@ -17,8 +17,10 @@ require (
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/golang/protobuf v1.3.1
+	github.com/hashicorp/go-version v1.2.0 // indirect
 	github.com/igorrendulic/go-aws-kms v0.0.1
 	github.com/mattn/go-isatty v0.0.8
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/prometheus/client_golang v1.0.0
 	github.com/sideshow/apns2 v0.16.0
@@ -34,6 +36,7 @@ require (
 	github.com/tidwall/rtree v0.0.0-20180113144539-6cd427091e0e // indirect
 	github.com/tidwall/tinyqueue v0.0.0-20180302190814-1e39f5511563 // indirect
 	github.com/tj/assert v0.0.0-20171129193455-018094318fb0 // indirect
+	github.com/ulikunitz/xz v0.5.6 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20190617133340-57b3e21c3d56
 	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980

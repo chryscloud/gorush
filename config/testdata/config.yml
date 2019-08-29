@@ -36,7 +36,7 @@ api:
   health_uri: "/healthz"
 
 auth:
-  enabled: false
+  enabled: true
   apikey: "abc"
 
 android:

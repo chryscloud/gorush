@@ -295,6 +295,7 @@ func usage() {
 // handles pinging the endpoint and returns an error if the
 // agent is in an unhealthy state.
 func pinger() error {
+
 	resp, err := http.Get("http://localhost:" + gorush.PushConf.Core.Port + gorush.PushConf.API.HealthURI)
 	if err != nil {
 		return err
