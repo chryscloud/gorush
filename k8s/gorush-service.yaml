@@ -7,7 +7,7 @@ metadata:
     app: gorush
     tier: frontend
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:358474393211:certificate/7f728104-d4aa-4496-bd6f-1431fda3ccc3
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:111111111111:certificate/1111111-1111-1111-1111-111111111
 spec:
   selector:
     app: gorush

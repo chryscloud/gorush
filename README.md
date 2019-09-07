@@ -1,3 +1,10 @@
+## This Fork Updates
+This fork has basic authentication enabled by default. To disable set config.yml auth:false. 
+
+If enabled, set the username and password. 
+
+All APIs are under basic auth if enabled.
+
 # gorush
 
 A push notification micro server using [Gin](https://github.com/gin-gonic/gin) framework written in Go (Golang) and see the [demo app](https://github.com/appleboy/flutter-gorush).
