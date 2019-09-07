@@ -1,0 +1,21 @@
+{
+    "notifications": [
+      {
+        "tokens": ["abcde"],
+        "platform": 1,
+        "development": true,
+        "topic":"my.app.budle",
+        "badge": 1,
+         "sound": {
+          "critical": 1,
+          "name": "default",
+          "volume": 1.0
+        },
+        "alert": {
+          "title" : "Myapp",
+          "body" : "This is test push notification",
+          "action-loc-key" : "PLAY"
+        }
+      }
+    ]
+  }

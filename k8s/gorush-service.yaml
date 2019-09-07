@@ -6,6 +6,8 @@ metadata:
   labels:
     app: gorush
     tier: frontend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:358474393211:certificate/7f728104-d4aa-4496-bd6f-1431fda3ccc3
 spec:
   selector:
     app: gorush
@@ -16,5 +18,5 @@ spec:
   # type: NodePort
   ports:
   - protocol: TCP
-    port: 80
+    port: 443
     targetPort: 8088

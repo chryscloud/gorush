@@ -107,10 +107,16 @@ func routerEngine() *gin.Engine {
 
 	r := gin.New()
 
-	// Global middleware
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	r.Use(AuthMiddleware())
+
+	// Basic Auth Middleware
+	if PushConf.Auth.Enabled {
+		basicAuth := gin.BasicAuth(gin.Accounts{
+			PushConf.Auth.Username: PushConf.Auth.Password,
+		})
+		r.Use(basicAuth)
+	}
 	r.Use(VersionMiddleware())
 	r.Use(LogMiddleware())
 	r.Use(StatMiddleware())

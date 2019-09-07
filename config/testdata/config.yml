@@ -36,8 +36,9 @@ api:
   health_uri: "/healthz"
 
 auth:
-  enabled: true
-  apikey: "abc"
+  enabled: false
+  username: "push"
+  password: "push"
 
 android:
   enabled: true

@@ -128,8 +128,9 @@ type SectionAutoTLS struct {
 
 // SectionAuth enables to set auth key read from request headers
 type SectionAuth struct {
-	Enabled bool   `yaml:"enabled"`
-	APIKEY  string `yaml:"apikey"`
+	Enabled  bool   `yaml:"enabled"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
 }
 
 // SectionAPI is sub section of config.
@@ -292,8 +293,9 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Android.MaxRetry = viper.GetInt("android.max_retry")
 
 	// Auth
-	conf.Auth.APIKEY = viper.GetString("auth.apikey")
 	conf.Auth.Enabled = viper.GetBool("auth.enabled")
+	conf.Auth.Username = viper.GetString("auth.username")
+	conf.Auth.Password = viper.GetString("auth.password")
 
 	// iOS
 	conf.Ios.Enabled = viper.GetBool("ios.enabled")
