@@ -1,5 +1,5 @@
 ## This Fork Updates
-This fork has basic authentication enabled by default. To disable set config.yml auth:false. 
+This fork has basic authentication enabled by default. To disable set parameter `auth -> Enabled` in `config.yml` to `false`. 
 
 If enabled, set the username and password. 
 
