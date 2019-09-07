@@ -27,16 +27,16 @@ grpc:
   port: 9000
 
 api:
-  push_uri: "/api/push"
-  stat_go_uri: "/api/stat/go"
-  stat_app_uri: "/api/stat/app"
-  config_uri: "/api/config"
-  sys_stat_uri: "/sys/stats"
+  push_uri: "/push"
+  stat_go_uri: "/stat/go"
+  stat_app_uri: "/stat/app"
+  config_uri: "/config"
+  sys_stat_uri: "/stats"
   metric_uri: "/metrics"
   health_uri: "/healthz"
 
 auth:
-  enabled: false
+  enabled: true
   username: "push"
   password: "push"
 

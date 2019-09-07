@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 
-	api "github.com/appleboy/gin-status-api"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/prometheus/client_golang/prometheus"
@@ -110,26 +109,33 @@ func routerEngine() *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// Basic Auth Middleware
-	if PushConf.Auth.Enabled {
-		basicAuth := gin.BasicAuth(gin.Accounts{
-			PushConf.Auth.Username: PushConf.Auth.Password,
-		})
-		r.Use(basicAuth)
-	}
 	r.Use(VersionMiddleware())
 	r.Use(LogMiddleware())
 	r.Use(StatMiddleware())
 
-	r.GET(PushConf.API.StatGoURI, api.StatusHandler)
-	r.GET(PushConf.API.StatAppURI, appStatusHandler)
-	r.GET(PushConf.API.ConfigURI, configHandler)
-	r.GET(PushConf.API.SysStatURI, sysStatsHandler)
-	r.POST(PushConf.API.PushURI, pushHandler)
-	r.GET(PushConf.API.MetricURI, metricsHandler)
+	var api *gin.RouterGroup
+	var metrics *gin.RouterGroup
+
+	// enable basic auth
+	if PushConf.Auth.Enabled {
+		basicAuth := gin.BasicAuth(gin.Accounts{
+			PushConf.Auth.Username: PushConf.Auth.Password,
+		})
+		api = r.Group("/api", basicAuth)
+		metrics = r.Group(PushConf.API.MetricURI, basicAuth)
+	} else {
+		api = r.Group("/api")
+		metrics = r.Group(PushConf.API.MetricURI)
+	}
+	api.GET(PushConf.API.StatGoURI, appStatusHandler)
+	api.GET(PushConf.API.StatAppURI, appStatusHandler)
+	api.GET(PushConf.API.ConfigURI, configHandler)
+	api.GET(PushConf.API.SysStatURI, sysStatsHandler)
+	api.POST(PushConf.API.PushURI, pushHandler)
+	metrics.GET("", metricsHandler)
+	api.GET("/version", versionHandler)
+	api.GET("/", rootHandler)
 	r.GET(PushConf.API.HealthURI, heartbeatHandler)
-	r.GET("/version", versionHandler)
-	r.GET("/", rootHandler)
 
 	return r
 }
