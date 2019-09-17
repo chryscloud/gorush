@@ -231,6 +231,18 @@ func GetIOSNotification(req PushNotification) *apns2.Notification {
 		payload.ThreadID(req.ThreadID)
 	}
 
+	if req.DeviceID != "" {
+		payload.Custom("device_id", req.DeviceID)
+	}
+
+	if req.State > 0 {
+		payload.Custom("state", req.State)
+	}
+
+	if req.Attachment != "" {
+		payload.Custom("attachment", req.Attachment)
+	}
+
 	for k, v := range req.Data {
 		payload.Custom(k, v)
 	}
