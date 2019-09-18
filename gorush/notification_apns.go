@@ -231,18 +231,6 @@ func GetIOSNotification(req PushNotification) *apns2.Notification {
 		payload.ThreadID(req.ThreadID)
 	}
 
-	if req.DeviceID != "" {
-		payload.Custom("device_id", req.DeviceID)
-	}
-
-	if req.State > 0 {
-		payload.Custom("state", req.State)
-	}
-
-	if req.Attachment != "" {
-		payload.Custom("attachment", req.Attachment)
-	}
-
 	for k, v := range req.Data {
 		payload.Custom(k, v)
 	}
@@ -250,6 +238,79 @@ func GetIOSNotification(req PushNotification) *apns2.Notification {
 	payload = iosAlertDictionary(payload, req)
 
 	notification.Payload = payload
+
+	return notification
+}
+
+// iOSPayload contains IOS APNS payload
+type iOSPayload struct {
+	APS  apsPayload             `json:"aps"`
+	Data map[string]interface{} `json:"data"`
+}
+
+// iosAPS contains only IOS APS Payload
+type iosAPS struct {
+	APS apsPayload `json:"aps"`
+}
+
+// APSPayload contains IOS APS Payload
+type apsPayload struct {
+	Alert            string      `json:"alert,omitempty"`
+	DeviceID         string      `json:"device_id,omitempty"`
+	State            int         `json:"state,omitempty"`
+	Title            string      `json:"title,omitempty"`
+	ContentAvailable int         `json:"content-available,omitempty"`
+	MutableContent   int         `json:"mutable-content,omitempty"`
+	Sound            interface{} `json:"sound,omitempty"`
+	Category         string      `json:"category,omitempty"`
+	Attachment       string      `json:"attachment,omitempty"`
+}
+
+// GetPurpleIOSNotification prepares custom IOS notification as per purple app
+// and returns apns2.Notification
+func GetPurpleIOSNotification(req PushNotification) *apns2.Notification {
+	notification := &apns2.Notification{
+		ApnsID:     req.ApnsID,
+		Topic:      req.Topic,
+		CollapseID: req.CollapseID,
+	}
+
+	if req.Expiration > 0 {
+		notification.Expiration = time.Unix(req.Expiration, 0)
+	}
+
+	if len(req.Priority) > 0 && req.Priority == "normal" {
+		notification.Priority = apns2.PriorityLow
+	}
+
+	aps := iosAPS{
+		APS: apsPayload{
+			Alert:      req.Message,
+			Title:      req.Title,
+			DeviceID:   req.DeviceID,
+			State:      req.State,
+			Sound:      req.Sound,
+			Category:   req.Category,
+			Attachment: req.Attachment,
+		},
+	}
+
+	if req.ContentAvailable {
+		aps.APS.ContentAvailable = 1
+	}
+
+	if req.MutableContent {
+		aps.APS.MutableContent = 1
+	}
+
+	notification.Payload = aps
+
+	if len(req.Data) > 0 {
+		notification.Payload = iOSPayload{
+			APS:  aps.APS,
+			Data: req.Data,
+		}
+	}
 
 	return notification
 }
@@ -287,11 +348,17 @@ func PushToIOS(req PushNotification) bool {
 
 Retry:
 	var (
-		isError   = false
-		newTokens []string
+		isError      = false
+		newTokens    []string
+		notification *apns2.Notification
 	)
 
-	notification := GetIOSNotification(req)
+	if req.DeviceID != "" {
+		notification = GetPurpleIOSNotification(req)
+	} else {
+		notification = GetIOSNotification(req)
+	}
+
 	client := getApnsClient(req)
 
 	for _, token := range req.Tokens {

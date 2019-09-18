@@ -67,7 +67,6 @@ func (suite *ConfigTestSuite) TestValidateConfDefault() {
 	assert.Equal(suite.T(), "/sys/stats", suite.ConfGorushDefault.API.SysStatURI)
 	assert.Equal(suite.T(), "/metrics", suite.ConfGorushDefault.API.MetricURI)
 	assert.Equal(suite.T(), "/healthz", suite.ConfGorushDefault.API.HealthURI)
-	assert.Equal(suite.T(), "/pusher", suite.ConfGorushDefault.API.PusherURI)
 
 	// Android
 	assert.Equal(suite.T(), true, suite.ConfGorushDefault.Android.Enabled)

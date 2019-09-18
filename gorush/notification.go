@@ -90,11 +90,11 @@ type PushNotification struct {
 	Development bool     `json:"development,omitempty"`
 	SoundName   string   `json:"name,omitempty"`
 	SoundVolume float32  `json:"volume,omitempty"`
-	Attachment  string   `json:"attachment,omitempty"`
 
 	// Custom Fields in APS
-	DeviceID string `json:"device_id,omitempty"`
-	State    int    `json:"state,omitempty"`
+	DeviceID   string `json:"device_id,omitempty"`
+	State      int    `json:"state,omitempty"`
+	Attachment string `json:"attachment,omitempty"`
 }
 
 // WaitDone decrements the WaitGroup counter.

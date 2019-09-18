@@ -132,7 +132,6 @@ func routerEngine() *gin.Engine {
 	api.GET(PushConf.API.ConfigURI, configHandler)
 	api.GET(PushConf.API.SysStatURI, sysStatsHandler)
 	api.POST(PushConf.API.PushURI, pushHandler)
-	api.POST(PushConf.API.PusherURI, pushHandler)
 	metrics.GET("", metricsHandler)
 	api.GET("/version", versionHandler)
 	api.GET("/", rootHandler)
