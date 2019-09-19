@@ -242,33 +242,9 @@ func GetIOSNotification(req PushNotification) *apns2.Notification {
 	return notification
 }
 
-// iOSPayload contains IOS APNS payload
-type iOSPayload struct {
-	APS  apsPayload             `json:"aps"`
-	Data map[string]interface{} `json:"data"`
-}
-
-// iosAPS contains only IOS APS Payload
-type iosAPS struct {
-	APS apsPayload `json:"aps"`
-}
-
-// APSPayload contains IOS APS Payload
-type apsPayload struct {
-	Alert            string      `json:"alert,omitempty"`
-	DeviceID         string      `json:"device_id,omitempty"`
-	State            int         `json:"state,omitempty"`
-	Title            string      `json:"title,omitempty"`
-	ContentAvailable int         `json:"content-available,omitempty"`
-	MutableContent   int         `json:"mutable-content,omitempty"`
-	Sound            interface{} `json:"sound,omitempty"`
-	Category         string      `json:"category,omitempty"`
-	Attachment       string      `json:"attachment,omitempty"`
-}
-
-// GetPurpleIOSNotification prepares custom IOS notification as per purple app
-// and returns apns2.Notification
-func GetPurpleIOSNotification(req PushNotification) *apns2.Notification {
+// GetLegacyIOSNotification prepares legacy IOS notification aps
+// it simply copies custom payload defined in data section and constructs copies to payload JSON
+func GetLegacyIOSNotification(req PushNotification) *apns2.Notification {
 	notification := &apns2.Notification{
 		ApnsID:     req.ApnsID,
 		Topic:      req.Topic,
@@ -283,34 +259,13 @@ func GetPurpleIOSNotification(req PushNotification) *apns2.Notification {
 		notification.Priority = apns2.PriorityLow
 	}
 
-	aps := iosAPS{
-		APS: apsPayload{
-			Alert:      req.Message,
-			Title:      req.Title,
-			DeviceID:   req.DeviceID,
-			State:      req.State,
-			Sound:      req.Sound,
-			Category:   req.Category,
-			Attachment: req.Attachment,
-		},
+	payload := payload.NewPayload()
+
+	for k, v := range req.Data {
+		payload.Custom(k, v)
 	}
 
-	if req.ContentAvailable {
-		aps.APS.ContentAvailable = 1
-	}
-
-	if req.MutableContent {
-		aps.APS.MutableContent = 1
-	}
-
-	notification.Payload = aps
-
-	if len(req.Data) > 0 {
-		notification.Payload = iOSPayload{
-			APS:  aps.APS,
-			Data: req.Data,
-		}
-	}
+	notification.Payload = payload
 
 	return notification
 }
@@ -353,8 +308,8 @@ Retry:
 		notification *apns2.Notification
 	)
 
-	if req.DeviceID != "" {
-		notification = GetPurpleIOSNotification(req)
+	if req.Legacy {
+		notification = GetLegacyIOSNotification(req)
 	} else {
 		notification = GetIOSNotification(req)
 	}
@@ -365,6 +320,8 @@ Retry:
 		notification.DeviceToken = token
 
 		// send ios notification
+		// j, _ := notification.MarshalJSON()
+		// fmt.Printf("payload:  %v\n", string(j))
 		res, err := client.Push(notification)
 
 		if err != nil {
