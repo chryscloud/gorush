@@ -259,10 +259,10 @@ func GetLegacyIOSNotification(req PushNotification) *apns2.Notification {
 		notification.Priority = apns2.PriorityLow
 	}
 
-	payload := payload.NewPayload()
+	payload := make(map[string]interface{})
 
 	for k, v := range req.Data {
-		payload.Custom(k, v)
+		payload[k] = v
 	}
 
 	notification.Payload = payload
@@ -320,8 +320,6 @@ Retry:
 		notification.DeviceToken = token
 
 		// send ios notification
-		// j, _ := notification.MarshalJSON()
-		// fmt.Printf("payload:  %v\n", string(j))
 		res, err := client.Push(notification)
 
 		if err != nil {

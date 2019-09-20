@@ -656,6 +656,33 @@ func TestPushToIOS(t *testing.T) {
 	assert.True(t, isError)
 }
 
+func TestPushToIOSLegacy(t *testing.T) {
+	PushConf, _ = config.LoadConf("")
+	PushConf.Ios.KeyPath = "../certificate/certificate-valid.pem"
+
+	PushConf.Ios.Enabled = true
+	err := InitAPNSClient()
+	assert.Nil(t, err)
+	err = InitAppStatus()
+	assert.Nil(t, err)
+	req := PushNotification{
+		Tokens:   []string{"11aa01229f15f0f0c52029d8cf8cd0aeaf2365fe4cebc4af26cd6d76b7919ef7"},
+		Platform: 1,
+		Message:  "Welcome",
+		Legacy:   true,
+		Data: map[string]interface{}{
+			"aps": map[string]interface{}{
+				"alert":        "test message",
+				"custom_field": "my custom field inside aps",
+			},
+			"custom_field_outside_aps": "custom field outside aps",
+		},
+	}
+	// send fail
+	isError := PushToIOS(req)
+	assert.True(t, isError)
+}
+
 func TestApnsHostFromRequest(t *testing.T) {
 	PushConf, _ = config.LoadConf("")
 
