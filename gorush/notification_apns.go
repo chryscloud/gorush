@@ -261,8 +261,13 @@ func GetLegacyIOSNotification(req PushNotification) *apns2.Notification {
 
 	payload := payload.NewPayload()
 
-	for k, v := range req.Data {
-		payload.Custom(k, v)
+	if aps, ok := req.Data["aps"]; ok {
+		payload.Custom("aps", aps)
+		delete(req.Data, "aps")
+	}
+
+	if len(req.Data) > 0 {
+		payload.Custom("data", req.Data)
 	}
 
 	notification.Payload = payload
